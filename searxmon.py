@@ -2,10 +2,10 @@
 import os, time, requests
 from pushover import init, Client
 
-pushover_token = ""
-pushover_key = ""
+pushover_token 		 = ""
+pushover_key 		 = ""
 searx_url            = "http://localhost:8888/?"
-max_sleep_time       = 120
+max_sleep_time       = 300
 
 
 if os.path.isfile("keywords.txt"):
@@ -21,7 +21,7 @@ if not os.path.exists("detections"):
 
 def send_alert(alert_kw):
     init(pushover_token)
-    alert_body = "OSINT ALERT:\r\n\r\n"
+    alert_body = "OSINT ALERT:\r\n"
     # walk through the searx results
     if alert_kw.has_key("searx"):
         for keyword in alert_kw['searx']:
@@ -97,9 +97,7 @@ def check_keywords(keywords):
         time.sleep(sleep_time)
     return alert_kw
 
-
 check_keywords(keywords)
-
 
 while True:
     alert_kw = check_keywords(keywords)
