@@ -2,17 +2,21 @@
 import os, time, requests
 from pushover import init, Client
 
-pushover_token 		 = ""
-pushover_key 		 = ""
+pushover_token       = ""
+pushover_key         = ""
 searx_url            = "http://localhost:8888/?"
 max_sleep_time       = 300
-
+blacklist            = ""
 
 if os.path.isfile("keywords.txt"):
 	keywords = filter(None, open("keywords.txt", "r").read().splitlines())
 else:
-	print("Failed to read in keywords.txt")
+    print("Failed to read in keywords.txt")
     raise SystemExit()
+
+
+if os.path.isfile("blacklist.txt"): # domain/url blacklist
+	blacklist = filter(None, open("blacklist.txt", "r").read().splitlines())
 
 
 if not os.path.exists("detections"):
@@ -41,8 +45,14 @@ def check_urls(keyword,urls):
             stored_urls = fd.read().splitlines()
         for url in urls:
             if url not in stored_urls:
-                print "[*] New URL for %s discovered: %s" % (keyword,url)
-                new_urls.append(url)
+		if not blacklist == "":
+		    matches = [b for b in blacklist if b in url]
+                    if len(matches) == 0:
+			print "[*] New URL for %s discovered: %s" % (keyword,url)
+			new_urls.append(url)
+		else:
+            	    print "[*] New URL for %s discovered: %s" % (keyword,url)
+            	    new_urls.append(url)
     else:
         new_urls = urls
     # now store the new urls back in the file
@@ -103,3 +113,4 @@ while True:
     alert_kw = check_keywords(keywords)
     if len(alert_kw.keys()):
         send_alert(alert_kw)
+
