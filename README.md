@@ -8,3 +8,8 @@ The idea came from Justin Seitz's [Automating OSINT blog](http://www.automatingo
 `sudo pip install python-pushover --user`
 
 Follow the blog entry linked above to setup a Searx instance.
+
+# Usage
+
+Add a few keywords to a keywords.txt file in the same directory. If there are domains, words, or phrases you'd like to black list just add them to blacklist.txt.
+Then just run ./searxmon.py on the same server that is running your Searx instance.
